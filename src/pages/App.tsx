@@ -1,28 +1,56 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import "./App.css";
 
 function App() {
   const [displayNumbers, setDisplayNumbers] = useState(["0", "0", "0"]); // Initial display
   const [isRolling, setIsRolling] = useState(false);
+  const [listNumber, setListNumber] = useState([]);
+
+  const fetchListNumber = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/unused`);
+
+      if (!response.ok) {
+        throw new Error("Response error");
+      }
+
+      const data = await response.json();
+      const list = data.map(([number]) => number.padStart(3, "0"));
+      setListNumber(list);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchListNumber();
+  }, []);
 
   // Function to generate a random digit (0-9)
-  const getRandomDigit = () => String(Math.floor(Math.random() * 10));
+  const getRandomNumbers = () =>
+    listNumber[Math.floor(Math.random() * listNumber.length)];
+
+  const getRandomDigits = () => String(Math.floor(Math.random() * 10));
 
   // Function to animate each digit one by one
   const startRolling = () => {
-    setIsRolling(true);
+    // setIsRolling(true);
     setDisplayNumbers(["0", "0", "0"]);
-    let newNumbers = [getRandomDigit(), getRandomDigit(), getRandomDigit()];
+    // console.log(listNumber);
+    let randomNumber = getRandomNumbers();
+    // console.log(randomNumber);
+    let newNumbers = [randomNumber[0], randomNumber[1], randomNumber[2]];
+    // console.log(newNumbers);
 
-    // Animate each digit one after another
+    // // Animate each digit one after another
     newNumbers.forEach((digit, index) => {
       setTimeout(() => {
         let counter = 0;
         const interval = setInterval(() => {
           setDisplayNumbers((prev) => {
             const updated = [...prev];
-            updated[index] = getRandomDigit();
+            updated[index] = getRandomDigits();
             return updated;
           });
           counter++;
