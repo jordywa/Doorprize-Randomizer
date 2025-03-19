@@ -5,7 +5,7 @@ import "./App.css";
 function App() {
   const [displayNumbers, setDisplayNumbers] = useState(["0", "0", "0"]); // Initial display
   const [isRolling, setIsRolling] = useState(false);
-  const [listNumber, setListNumber] = useState([]);
+  const [listNumber, setListNumber] = useState<string[]>([]);
 
   const fetchListNumber = async () => {
     try {
@@ -15,8 +15,8 @@ function App() {
         throw new Error("Response error");
       }
 
-      const data = await response.json();
-      const list = data.map(([number]) => number.padStart(3, "0"));
+      const data: [number, boolean][] = await response.json();
+      const list = data.map(([number]) => String(number).padStart(3, "0"));
       setListNumber(list);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -35,7 +35,7 @@ function App() {
 
   // Function to animate each digit one by one
   const startRolling = () => {
-    // setIsRolling(true);
+    setIsRolling(true);
     setDisplayNumbers(["0", "0", "0"]);
     // console.log(listNumber);
     let randomNumber = getRandomNumbers();
