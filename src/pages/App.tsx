@@ -86,7 +86,6 @@ function App() {
           </motion.div>
         ))}
       </div>
-      <div>Testing</div>
       <button
         onClick={startRolling}
         disabled={isRolling}
