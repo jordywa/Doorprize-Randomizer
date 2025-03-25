@@ -62,7 +62,7 @@ const Manage = () => {
       if (!response.ok) {
         throw new Error(data.error || "Something went wrong");
       }
-      setCurrNumber(Number(currNumber) + 1);
+      setCurrNumber(Number(currNumber) - 1);
       setIsLoading(false);
     } catch (err) {
       console.error(err);
